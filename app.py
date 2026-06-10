@@ -2,6 +2,7 @@ import io
 import os
 import threading
 import webbrowser
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, timedelta
 import requests
 from flask import Flask, render_template, request, send_file
@@ -165,13 +166,14 @@ def download():
         return {"error": "No cities selected."}, 400
 
     city_lookup = build_city_lookup()
-    results = []
+    valid_names = [n for n in selected_names if n in city_lookup]
 
-    for name in selected_names:
-        if name in city_lookup:
-            lat, lon = city_lookup[name]
-            temp_series = fetch_temperatures_30_days(lat, lon)
-            results.append((name, temp_series))
+    def fetch_one(name):
+        lat, lon = city_lookup[name]
+        return (name, fetch_temperatures_30_days(lat, lon))
+
+    with ThreadPoolExecutor() as pool:
+        results = list(pool.map(fetch_one, valid_names))
 
     excel_buf = build_excel(results)
 
