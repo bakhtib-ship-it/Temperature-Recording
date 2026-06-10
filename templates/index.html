@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌡️ World Temperature Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>🌍 World Temperature Dashboard</h1>
+    <p class="subtitle">Select the cities you want and download a temperature report as an Excel file.</p>
+  </header>
+
+  <main>
+    <form id="city-form">
+
+      <!-- Jinja2 loops over the CITIES dict passed from app.py.
+           For each continent, it prints a section header, then one
+           checkbox per city inside that continent. -->
+      {% for continent, city_list in cities.items() %}
+      <section class="continent-group">
+        <h2>{{ continent }}</h2>
+        <div class="city-grid">
+          {% for city in city_list %}
+          <label class="city-label">
+            <input type="checkbox" name="city" value="{{ city.name }}" />
+            {{ city.name }}
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+
+    </form>
+
+    <!-- Buttons -->
+    <div class="button-row">
+      <button id="clear-btn" type="button">Clear All</button>
+      <button id="submit-btn" type="button">⬇ Download Temperature Report</button>
+    </div>
+
+    <!-- Loading animation — hidden until Submit is clicked -->
+    <div id="loading" class="hidden">
+      <div class="thermometer-wrap">
+        <div class="therm-outer">
+          <div class="therm-fill"></div>
+        </div>
+        <div class="therm-bulb"></div>
+      </div>
+      <p class="loading-text">Fetching temperatures… please wait ☀️</p>
+    </div>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

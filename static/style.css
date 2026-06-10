@@ -1,0 +1,252 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #f1f5f9;
+  min-height: 100vh;
+  color: #0f172a;
+}
+
+/* ── Header ── */
+header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #0e7490 100%);
+  color: white;
+  text-align: center;
+  padding: 3rem 1rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0ea5e9, #06b6d4, #0ea5e9);
+}
+
+header h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  opacity: 0.7;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* ── Main layout ── */
+main {
+  max-width: 960px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+}
+
+/* ── Continent sections ── */
+.continent-group {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.06);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.continent-group h2 {
+  background: #0f172a;
+  color: white;
+  padding: 0.8rem 1.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.continent-group h2::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #0ea5e9;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem 1.2rem;
+}
+
+/* ── City labels styled as selectable pills ── */
+.city-label {
+  display: flex;
+  align-items: center;
+  padding: 0.45rem 0.9rem;
+  border-radius: 9999px;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #475569;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  user-select: none;
+}
+
+.city-label:hover {
+  border-color: #0ea5e9;
+  color: #0f172a;
+  background: #f0f9ff;
+}
+
+/* When the hidden checkbox inside is checked, the pill turns blue */
+.city-label:has(input:checked) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: white;
+}
+
+.city-label:has(input:checked):hover {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+/* Hide the raw checkbox — the pill itself is the visual indicator */
+.city-label input[type="checkbox"] {
+  display: none;
+}
+
+/* ── Buttons ── */
+.button-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2.5rem 0 2rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 0.85rem 2.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  transition: transform 0.1s, box-shadow 0.15s, background 0.15s;
+}
+
+button:hover  { transform: translateY(-2px); }
+button:active { transform: translateY(0); }
+
+#submit-btn {
+  background: #0ea5e9;
+  color: white;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
+}
+
+#submit-btn:hover {
+  background: #0284c7;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.5);
+}
+
+#clear-btn {
+  background: transparent;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+#clear-btn:hover {
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Loading overlay ── */
+.hidden { display: none !important; }
+
+#loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  z-index: 999;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Thermometer ── */
+.thermometer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.therm-outer {
+  width: 22px;
+  height: 100px;
+  border: 3px solid #0ea5e9;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background: #0f172a;
+}
+
+.therm-fill {
+  width: 100%;
+  background: linear-gradient(to top, #ef4444, #f97316);
+  border-radius: 0 0 8px 8px;
+  animation: rise 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes rise {
+  from { height: 15%; }
+  to   { height: 90%; }
+}
+
+.therm-bulb {
+  width: 34px;
+  height: 34px;
+  background: radial-gradient(circle at 40% 35%, #ff6b6b, #dc2626);
+  border-radius: 50%;
+  border: 3px solid #0ea5e9;
+  margin-top: -3px;
+  animation: glow 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 6px  rgba(239, 68, 68, 0.5); }
+  to   { box-shadow: 0 0 20px rgba(239, 68, 68, 0.9); }
+}
